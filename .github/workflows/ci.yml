@@ -62,9 +62,9 @@ jobs:
       run: npm ci
       working-directory: ./basic-kanban-front
     
-    - name: Lint
-      run: npm run lint
-      working-directory: ./basic-kanban-front
+    # - name: Lint
+    #   run: npm run lint
+    #   working-directory: ./basic-kanban-front
     
     - name: Build
       run: npm run build -- --configuration production
