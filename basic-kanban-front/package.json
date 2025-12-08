@@ -39,10 +39,9 @@
     "@angular/build": "^21.0.0",
     "@angular/cli": "^21.0.0",
     "@angular/compiler-cli": "^21.0.0",
+    "@vitest/browser-webdriverio": "^4.0.15",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
-    "vitest": "^4.0.8",
-    "@vitest/browser-webdriverio": "^0.0.14",
-    "webdriverio": "^8.32.2"
+    "vitest": "^4.0.8"
   }
 }
