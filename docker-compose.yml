@@ -22,7 +22,7 @@ services:
       retries: 5
 
   # Backend .NET Web API
-  api:
+  basic-kanban-api:
     build:
       context: /basic-kanban-api
       dockerfile: Dockerfile
@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 
   # Frontend Angular
-  frontend:
+  basic-kanban-front:
     build:
       context: /basic-kanban-front
       dockerfile: Dockerfile
