@@ -22,32 +22,33 @@ services:
       retries: 5
 
   # Backend .NET Web API
-  basic-kanban-api:
+  api:
     build:
-      context: /basic-kanban-api
-      dockerfile: Dockerfile
-    container_name: basic-kanban-api
+      context: ./basic-kanban-api
+      dockerfile: basic-kanban-api/Dockerfile
+    container_name: kanban-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=kanban_db;Username=kanban_user;Password=kanban_pass
     ports:
-      - "5000:80"
+      - "5000:8080"
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - kanban-network
-    volumes:
-      - basic-kanban-api:/src
     restart: unless-stopped
 
   # Frontend Angular
-  basic-kanban-front:
+  frontend:
     build:
-      context: /basic-kanban-front
+      context: ./basic-kanban-front
       dockerfile: Dockerfile
-    container_name: basic-kanban-front
+    container_name: kanban-frontend
+    environment:
+      - API_URL=http://localhost:5000
     ports:
       - "4200:80"
     depends_on:
