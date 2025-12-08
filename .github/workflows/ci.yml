@@ -13,8 +13,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-      with:
-        submodules: recursive
     
     - name: Debug - List root files
       run: ls -la
@@ -60,6 +58,7 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
+        cache-dependency-path: 'basic-kanban-front/package-lock.json'
     
     - name: Install dependencies
       run: npm ci
