@@ -1,0 +1,6 @@
+[submodule "basic-kanban-api"]
+	path = basic-kanban-api
+	url = https://github.com/IanCurtis4/basic-kanban-api.git
+[submodule "basic-kanban-front"]
+	path = basic-kanban-front
+	url = https://github.com/IanCurtis4/basic-kanban-front.git
