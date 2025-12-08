@@ -24,9 +24,9 @@ services:
   # Backend .NET Web API
   api:
     build:
-      context: ./backend
+      context: /basic-kanban-api
       dockerfile: Dockerfile
-    container_name: kanban-api
+    container_name: basic-kanban-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
@@ -39,15 +39,15 @@ services:
     networks:
       - kanban-network
     volumes:
-      - ./backend:/src
+      - basic-kanban-api:/src
     restart: unless-stopped
 
   # Frontend Angular
   frontend:
     build:
-      context: ./frontend
+      context: /basic-kanban-front
       dockerfile: Dockerfile
-    container_name: kanban-frontend
+    container_name: basic-kanban-front
     ports:
       - "4200:80"
     depends_on:
