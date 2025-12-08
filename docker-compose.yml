@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: kanban-postgres
+    environment:
+      POSTGRES_DB: kanban_db
+      POSTGRES_USER: kanban_user
+      POSTGRES_PASSWORD: kanban_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kanban-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kanban_user -d kanban_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend .NET Web API
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kanban-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=kanban_db;Username=kanban_user;Password=kanban_pass
+    ports:
+      - "5000:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - kanban-network
+    volumes:
+      - ./backend:/src
+    restart: unless-stopped
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kanban-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - kanban-network
+    restart: unless-stopped
+
+networks:
+  kanban-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
