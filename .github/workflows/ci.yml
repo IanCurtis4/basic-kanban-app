@@ -21,15 +21,15 @@ jobs:
     
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: ./basic-kanban-api
+      working-directory: basic-kanban-api
     
     - name: Build
       run: dotnet build --configuration Release --no-restore
-      working-directory: ./basic-kanban-api
+      working-directory: basic-kanban-api
     
     - name: Test
       run: dotnet test --configuration Release --no-build --verbosity normal
-      working-directory: ./basic-kanban-api
+      working-directory: basic-kanban-api
 
   frontend:
     name: Frontend Build & Test
@@ -43,23 +43,23 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: './basic-kanban-front/package-lock.json'
+        cache-dependency-path: 'basic-kanban-front/package-lock.json'
     
     - name: Install dependencies
       run: npm ci
-      working-directory: ./basic-kanban-front
+      working-directory: basic-kanban-front
     
     - name: Lint
       run: npm run lint
-      working-directory: ./basic-kanban-front
+      working-directory: basic-kanban-front
     
     - name: Build
       run: npm run build -- --configuration production
-      working-directory: ./basic-kanban-front
+      working-directory: basic-kanban-front
     
     - name: Test
       run: npm run test:ci
-      working-directory: ./basic-kanban-front
+      working-directory: basic-kanban-front
 
   docker:
     name: Build Docker Images
