@@ -47,19 +47,19 @@ jobs:
     
     - name: Install dependencies
       run: npm ci
-      working-directory: basic-kanban-front
+      working-directory: ./basic-kanban-front
     
     - name: Lint
       run: npm run lint
-      working-directory: basic-kanban-front
+      working-directory: ./basic-kanban-front
     
     - name: Build
       run: npm run build -- --configuration production
-      working-directory: basic-kanban-front
+      working-directory: ./basic-kanban-front
     
     - name: Test
       run: npm run test:ci
-      working-directory: basic-kanban-front
+      working-directory: ./basic-kanban-front
 
   docker:
     name: Build Docker Images
