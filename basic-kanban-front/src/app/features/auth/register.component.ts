@@ -27,6 +27,32 @@ import { CommonModule } from '@angular/common';
           </div>
 
           <div class="form-group">
+            <label>Username</label>
+            <input 
+              type="text" 
+              formControlName="userName" 
+              placeholder="Choose a username"
+              [class.error]="isFieldInvalid('userName')"
+            />
+            <span *ngIf="isFieldInvalid('userName')" class="error-message">
+              Username is required
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Username</label>
+            <input 
+              type="text" 
+              formControlName="userName" 
+              placeholder="Enter your full name"
+              [class.error]="isFieldInvalid('fullName')"
+            />
+            <span *ngIf="isFieldInvalid('fullName')" class="error-message">
+              Full name is required
+            </span>
+          </div>
+
+          <div class="form-group">
             <label>Email</label>
             <input 
               type="email" 
@@ -44,6 +70,32 @@ import { CommonModule } from '@angular/common';
             <input 
               type="password" 
               formControlName="password" 
+              placeholder="Min 8 chars, 1 uppercase, 1 digit"
+              [class.error]="isFieldInvalid('password')"
+            />
+            <span *ngIf="isFieldInvalid('password')" class="error-message">
+              Password must be at least 8 characters with uppercase and digits
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input 
+              type="password" 
+              formControlName="confirmPassword" 
+              placeholder="Confirm your password"
+              [class.error]="isFieldInvalid('confirmPassword')"
+            />
+            <span *ngIf="isFieldInvalid('confirmPassword')" class="error-message">
+              Please confirm your password
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input 
+              type="password" 
+              formControlName="confirmPassword" 
               placeholder="Min 8 chars, 1 uppercase, 1 digit"
               [class.error]="isFieldInvalid('password')"
             />
@@ -181,13 +233,15 @@ export class RegisterComponent {
     private router: Router
   ) {
     this.registerForm = this.fb.group({
+      userName: ['', [Validators.required]],
       fullName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
         Validators.pattern(/(?=.*[A-Z])(?=.*\d)/)
-      ]]
+      ]],
+      confirmPassword: ['', [Validators.required]]
     });
   }
 
