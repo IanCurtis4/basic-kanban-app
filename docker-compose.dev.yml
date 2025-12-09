@@ -2,7 +2,7 @@ services:
   # Banco de dados PostgreSQL
   postgres:
     image: postgres:16-alpine
-    container_name: kanban-postgres
+    container_name: kanban-postgres-dev
     environment:
       POSTGRES_DB: kanban_db
       POSTGRES_USER: kanban_user
@@ -10,9 +10,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_dev:/var/lib/postgresql/data
     networks:
-      - kanban-network
+      - kanban-network-dev
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U kanban_user -d kanban_db"]
       interval: 10s
@@ -23,8 +23,8 @@ services:
   api:
     build:
       context: ./basic-kanban-api
-      dockerfile: basic-kanban-api/Dockerfile
-    container_name: kanban-api
+      dockerfile: basic-kanban-api/Dockerfile.dev
+    container_name: kanban-api-dev
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:8080
@@ -33,34 +33,38 @@ services:
       - Cors__AllowedOrigins__0=http://localhost:4200
       - Cors__AllowedOrigins__1=http://localhost:5000
       - Cors__AllowedOrigins__2=http://127.0.0.1:4200
+      - Cors__AllowedOrigins__3=http://localhost:3000
     ports:
       - "5000:8080"
     depends_on:
       postgres:
         condition: service_healthy
     networks:
-      - kanban-network
+      - kanban-network-dev
     restart: unless-stopped
 
-  # Frontend Angular
+  # Frontend Angular (Development)
   frontend:
     build:
       context: ./basic-kanban-front
-      dockerfile: Dockerfile
-    container_name: kanban-frontend
+      dockerfile: Dockerfile.dev
+    container_name: kanban-frontend-dev
     environment:
       - API_URL=http://localhost:5000
     ports:
-      - "4200:80"
+      - "4200:4200"
     depends_on:
       - api
     networks:
-      - kanban-network
+      - kanban-network-dev
     restart: unless-stopped
+    volumes:
+      - ./basic-kanban-front/src:/app/src
+      - ./basic-kanban-front/dist:/app/dist
 
 networks:
-  kanban-network:
+  kanban-network-dev:
     driver: bridge
 
 volumes:
-  postgres_data:
+  postgres_data_dev:

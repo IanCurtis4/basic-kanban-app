@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+
+WORKDIR /src
+
+COPY ["basic-kanban-api/basic-kanban-api.csproj", "basic-kanban-api/"]
+RUN dotnet restore "./basic-kanban-api/basic-kanban-api.csproj"
+
+COPY . .
+WORKDIR "/src/basic-kanban-api"
+RUN dotnet build "./basic-kanban-api.csproj" -c Debug -o /app/build
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+
+WORKDIR /app
+COPY --from=build /app/build .
+
+EXPOSE 8080
+
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+
+ENTRYPOINT ["dotnet", "basic-kanban-api.dll"]
