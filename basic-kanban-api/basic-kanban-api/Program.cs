@@ -85,6 +85,63 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// Apply migrations automatically with retry/backoff to tolerate DB cold-starts
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<KanbanDbContext>();
+
+    var maxAttempts = 8;
+    var attempt = 0;
+    var succeeded = false;
+
+    while (!succeeded && ++attempt <= maxAttempts)
+    {
+        try
+        {
+            logger.LogInformation("Applying migrations (attempt {Attempt}/{Max})...", attempt, maxAttempts);
+            await dbContext.Database.MigrateAsync();
+            logger.LogInformation("Database migrations applied.");
+            succeeded = true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Migration attempt {Attempt} failed.", attempt);
+            if (attempt == maxAttempts)
+            {
+                logger.LogError(ex, "Maximum migration attempts reached — rethrowing.");
+                throw;
+            }
+
+            var delayMs = Math.Min(1000 * attempt, 10000);
+            logger.LogInformation("Waiting {Delay}ms before next attempt...", delayMs);
+            await Task.Delay(delayMs);
+        }
+    }
+
+    // Create default roles after migrations applied
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var defaultRoles = new[] { "User", "Manager", "Admin" };
+
+    foreach (var roleName in defaultRoles)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            var result = await roleManager.CreateAsync(new Role
+            {
+                Name = roleName,
+                Description = $"{roleName} role",
+                CreatedAt = DateTime.UtcNow
+            });
+
+            if (!result.Succeeded)
+            {
+                logger.LogWarning("Creating role {Role} returned errors: {Errors}", roleName, string.Join(';', result.Errors.Select(e => e.Description)));
+            }
+        }
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

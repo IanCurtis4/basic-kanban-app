@@ -20,9 +20,11 @@ namespace basic_kanban_api.Models
         [EnumDataType(typeof(CategoryType))]
         public CategoryType Difficulty { get; set; }
 
-        public (DateTime start, DateTime end) EstimatedTime { get; set; }
+        public DateTime? EstimatedStart { get; set; }
+        public DateTime? EstimatedEnd { get; set; }
 
-        public (DateTime start, DateTime end) ActualTime { get; set; }
+        public DateTime? ActualStart { get; set; }
+        public DateTime? ActualEnd { get; set; }
 
         // Relacionamentos
         [Required]

@@ -51,8 +51,10 @@ namespace basic_kanban_api.Controllers
                 Title = card.Title,
                 Description = card.Description,
                 Difficulty = (int)card.Difficulty,
-                EstimatedTime = card.EstimatedTime == default ? null : card.EstimatedTime,
-                ActualTime = card.ActualTime == default ? null : card.ActualTime,
+                EstimatedStart = card.EstimatedStart,
+                EstimatedEnd = card.EstimatedEnd,
+                ActualStart = card.ActualStart,
+                ActualEnd = card.ActualEnd,
                 CardListId = card.CardListId,
                 AssignedToUserId = card.AssignedToUserId,
                 AssignedToUserName = card.AssignedToUser?.FullName,
@@ -126,7 +128,8 @@ namespace basic_kanban_api.Controllers
                 Title = createCardDto.Title,
                 Description = createCardDto.Description,
                 Difficulty = (Category.CategoryType)createCardDto.Difficulty,
-                EstimatedTime = createCardDto.EstimatedTime ?? default,
+                EstimatedStart = createCardDto.EstimatedStart,
+                EstimatedEnd = createCardDto.EstimatedEnd,
                 CardListId = createCardDto.CardListId,
                 AssignedToUserId = createCardDto.AssignedToUserId,
                 CreatedAt = DateTime.UtcNow,
@@ -161,8 +164,10 @@ namespace basic_kanban_api.Controllers
             card.Title = updateCardDto.Title ?? card.Title;
             card.Description = updateCardDto.Description ?? card.Description;
             card.Difficulty = (Category.CategoryType)updateCardDto.Difficulty;
-            card.EstimatedTime = updateCardDto.EstimatedTime ?? card.EstimatedTime;
-            card.ActualTime = updateCardDto.ActualTime ?? card.ActualTime;
+            card.EstimatedStart = updateCardDto.EstimatedStart ?? card.EstimatedStart;
+            card.EstimatedEnd = updateCardDto.EstimatedEnd ?? card.EstimatedEnd;
+            card.ActualStart = updateCardDto.ActualStart ?? card.ActualStart;
+            card.ActualEnd = updateCardDto.ActualEnd ?? card.ActualEnd;
             card.AssignedToUserId = updateCardDto.AssignedToUserId ?? card.AssignedToUserId;
             card.Order = updateCardDto.Order ?? card.Order;
             card.UpdatedAt = DateTime.UtcNow;

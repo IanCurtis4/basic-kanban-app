@@ -22,20 +22,32 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   register(registerDto: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, registerDto).pipe(
-      tap(response => this.handleAuthSuccess(response)),
+    return this.http.post<any>(`${this.apiUrl}/register`, registerDto).pipe(
+      tap(response => {
+        if (response.token || response.Token) {
+          const token = response.token || response.Token;
+          const user = response.user || response.User;
+          this.handleAuthSuccess({ token, user });
+        }
+      }),
       catchError(error => {
-        this.setError(error.error?.message || 'Registration failed');
+        this.setError(error.error?.message || error.error?.Message || 'Registration failed');
         throw error;
       })
     );
   }
 
   login(loginDto: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginDto).pipe(
-      tap(response => this.handleAuthSuccess(response)),
+    return this.http.post<any>(`${this.apiUrl}/login`, loginDto).pipe(
+      tap(response => {
+        if (response.token || response.Token) {
+          const token = response.token || response.Token;
+          const user = response.user || response.User;
+          this.handleAuthSuccess({ token, user });
+        }
+      }),
       catchError(error => {
-        this.setError(error.error?.message || 'Login failed');
+        this.setError(error.error?.message || error.error?.Message || 'Login failed');
         throw error;
       })
     );

@@ -6,8 +6,10 @@ namespace basic_kanban_api.DTOs
         public string Title { get; set; }
         public string Description { get; set; }
         public int Difficulty { get; set; }
-        public (DateTime start, DateTime end)? EstimatedTime { get; set; }
-        public (DateTime start, DateTime end)? ActualTime { get; set; }
+        public DateTime? EstimatedStart { get; set; }
+        public DateTime? EstimatedEnd { get; set; }
+        public DateTime? ActualStart { get; set; }
+        public DateTime? ActualEnd { get; set; }
         public Guid CardListId { get; set; }
         public Guid? AssignedToUserId { get; set; }
         public string AssignedToUserName { get; set; }
@@ -21,7 +23,8 @@ namespace basic_kanban_api.DTOs
         public string Title { get; set; }
         public string Description { get; set; }
         public int Difficulty { get; set; }
-        public (DateTime start, DateTime end)? EstimatedTime { get; set; }
+        public DateTime? EstimatedStart { get; set; }
+        public DateTime? EstimatedEnd { get; set; }
         public Guid CardListId { get; set; }
         public Guid? AssignedToUserId { get; set; }
     }
@@ -31,8 +34,10 @@ namespace basic_kanban_api.DTOs
         public string Title { get; set; }
         public string Description { get; set; }
         public int Difficulty { get; set; }
-        public (DateTime start, DateTime end)? EstimatedTime { get; set; }
-        public (DateTime start, DateTime end)? ActualTime { get; set; }
+        public DateTime? EstimatedStart { get; set; }
+        public DateTime? EstimatedEnd { get; set; }
+        public DateTime? ActualStart { get; set; }
+        public DateTime? ActualEnd { get; set; }
         public Guid? AssignedToUserId { get; set; }
         public int? Order { get; set; }
     }

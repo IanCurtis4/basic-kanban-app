@@ -40,19 +40,6 @@ import { CommonModule } from '@angular/common';
           </div>
 
           <div class="form-group">
-            <label>Username</label>
-            <input 
-              type="text" 
-              formControlName="userName" 
-              placeholder="Enter your full name"
-              [class.error]="isFieldInvalid('fullName')"
-            />
-            <span *ngIf="isFieldInvalid('fullName')" class="error-message">
-              Full name is required
-            </span>
-          </div>
-
-          <div class="form-group">
             <label>Email</label>
             <input 
               type="email" 
@@ -88,19 +75,6 @@ import { CommonModule } from '@angular/common';
             />
             <span *ngIf="isFieldInvalid('confirmPassword')" class="error-message">
               Please confirm your password
-            </span>
-          </div>
-
-          <div class="form-group">
-            <label>Confirm Password</label>
-            <input 
-              type="password" 
-              formControlName="confirmPassword" 
-              placeholder="Min 8 chars, 1 uppercase, 1 digit"
-              [class.error]="isFieldInvalid('password')"
-            />
-            <span *ngIf="isFieldInvalid('password')" class="error-message">
-              Password must be at least 8 characters with uppercase and digits
             </span>
           </div>
 

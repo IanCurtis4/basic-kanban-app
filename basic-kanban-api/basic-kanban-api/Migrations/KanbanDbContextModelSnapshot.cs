@@ -194,8 +194,11 @@ namespace basic_kanban_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<ValueTuple<DateTime, DateTime>>("ActualTime")
-                        .HasColumnType("record");
+                    b.Property<DateTime?>("ActualStart")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ActualEnd")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("AssignedToUserId")
                         .HasColumnType("uuid");
@@ -214,8 +217,11 @@ namespace basic_kanban_api.Migrations
                     b.Property<int>("Difficulty")
                         .HasColumnType("integer");
 
-                    b.Property<ValueTuple<DateTime, DateTime>>("EstimatedTime")
-                        .HasColumnType("record");
+                    b.Property<DateTime?>("EstimatedStart")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("EstimatedEnd")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");

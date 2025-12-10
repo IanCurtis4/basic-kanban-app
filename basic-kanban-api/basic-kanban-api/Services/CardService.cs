@@ -9,8 +9,8 @@ namespace basic_kanban_api.Services
     {
         Task<Card> GetCardByIdAsync(Guid cardId);
         Task<IEnumerable<Card>> GetCardsByCardListAsync(Guid cardListId);
-        Task<Card> CreateCardAsync(Guid cardListId, string title, string description, CategoryType difficulty, Guid? assignedToUserId = null);
-        Task<Card> UpdateCardAsync(Guid cardId, string title, string description, CategoryType difficulty, Guid? assignedToUserId, (DateTime, DateTime)? estimatedTime, (DateTime, DateTime)? actualTime);
+        Task<Card> CreateCardAsync(Guid cardListId, string title, string description, CategoryType difficulty, Guid? assignedToUserId = null, DateTime? estimatedStart = null, DateTime? estimatedEnd = null);
+        Task<Card> UpdateCardAsync(Guid cardId, string title, string description, CategoryType difficulty, Guid? assignedToUserId, DateTime? estimatedStart, DateTime? estimatedEnd, DateTime? actualStart, DateTime? actualEnd);
         Task DeleteCardAsync(Guid cardId);
         Task AssignCardAsync(Guid cardId, Guid userId);
         Task UnassignCardAsync(Guid cardId);
@@ -42,7 +42,7 @@ namespace basic_kanban_api.Services
                 .ToListAsync();
         }
 
-        public async Task<Card> CreateCardAsync(Guid cardListId, string title, string description, CategoryType difficulty, Guid? assignedToUserId = null)
+        public async Task<Card> CreateCardAsync(Guid cardListId, string title, string description, CategoryType difficulty, Guid? assignedToUserId = null, DateTime? estimatedStart = null, DateTime? estimatedEnd = null)
         {
             var cardList = await _context.CardLists.FirstOrDefaultAsync(cl => cl.Id == cardListId);
             if (cardList == null)
@@ -60,6 +60,8 @@ namespace basic_kanban_api.Services
                 Description = description,
                 Difficulty = difficulty,
                 AssignedToUserId = assignedToUserId,
+                EstimatedStart = estimatedStart,
+                EstimatedEnd = estimatedEnd,
                 CreatedAt = DateTime.UtcNow,
                 Order = maxOrder + 1
             };
@@ -70,7 +72,7 @@ namespace basic_kanban_api.Services
             return card;
         }
 
-        public async Task<Card> UpdateCardAsync(Guid cardId, string title, string description, CategoryType difficulty, Guid? assignedToUserId, (DateTime, DateTime)? estimatedTime, (DateTime, DateTime)? actualTime)
+        public async Task<Card> UpdateCardAsync(Guid cardId, string title, string description, CategoryType difficulty, Guid? assignedToUserId, DateTime? estimatedStart, DateTime? estimatedEnd, DateTime? actualStart, DateTime? actualEnd)
         {
             var card = await _context.Cards.FirstOrDefaultAsync(c => c.Id == cardId);
             if (card == null)
@@ -80,8 +82,10 @@ namespace basic_kanban_api.Services
             card.Description = description ?? card.Description;
             card.Difficulty = difficulty;
             card.AssignedToUserId = assignedToUserId;
-            card.EstimatedTime = estimatedTime ?? card.EstimatedTime;
-            card.ActualTime = actualTime ?? card.ActualTime;
+            card.EstimatedStart = estimatedStart ?? card.EstimatedStart;
+            card.EstimatedEnd = estimatedEnd ?? card.EstimatedEnd;
+            card.ActualStart = actualStart ?? card.ActualStart;
+            card.ActualEnd = actualEnd ?? card.ActualEnd;
             card.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
